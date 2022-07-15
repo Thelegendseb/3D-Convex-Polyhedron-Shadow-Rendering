@@ -1,32 +1,38 @@
 ﻿Imports XApps
+Imports System.Numerics
 Public Class Program
     Inherits XApp
 
-    Private TestCube As Shape
+    Private CurrentShape As Shape
+    Private OmniLight As Vector3
     Sub New(FormIn As Form)
         MyBase.New(FormIn)
 
-        Me.TestCube = New Shape
+        Me.OmniLight = New Vector3(0, 0, -200)
 
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(-50, -50, -50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(-50, -50, 50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(-50, 50, 50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(50, 50, 50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(50, -50, -50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(50, 50, -50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(50, -50, 50))
-        Me.TestCube.GetVerticies.Add(New Numerics.Vector3(-50, 50, -50))
+        'Rays hit wall when Z Component of ray is == x
 
-        Me.Session.AddObj(New TempShapeRenderer(Me.TestCube))
+        Me.CurrentShape = New Shape
+
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(-100, -100, -100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(-100, -100, 100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(-100, 100, 100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(100, 100, 100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(100, -100, -100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(100, 100, -100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(100, -100, 100))
+        Me.CurrentShape.GetVerticies.Add(New Numerics.Vector3(-100, 100, -100))
+
+        Me.Session.AddObj(New ShapeRenderer(Me.CurrentShape))
 
     End Sub
 
     Public Overrides Sub UpdateOccured()
 
-        Me.TestCube.GetTransform.Rotation.Roll += ShapeMath.DegreesToRadians(1) ' Works
-        Me.TestCube.GetTransform.Rotation.Yaw += ShapeMath.DegreesToRadians(1) ' Works
-        Me.TestCube.GetTransform.Rotation.Pitch += ShapeMath.DegreesToRadians(1) ' Works
-        Me.TestCube.GetTransform.Rotation.LetClampAll()
+        Me.CurrentShape.GetTransform.Rotation.Roll += ShapeMath.DegreesToRadians(1) ' Works
+        Me.CurrentShape.GetTransform.Rotation.Yaw += ShapeMath.DegreesToRadians(1) ' Works
+        Me.CurrentShape.GetTransform.Rotation.Pitch += ShapeMath.DegreesToRadians(1) ' Works
+        Me.CurrentShape.GetTransform.Rotation.LetClampAll()
 
     End Sub
 End Class
