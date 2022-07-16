@@ -3,6 +3,13 @@ Public Class ShapeMath
     Public Shared Function DegreesToRadians(val As Double) As Double
         Return val * (Math.PI / 180)
     End Function
+    Public Shared Function RemoveZComponent(L As List(Of Vector3)) As List(Of Point)
+        Dim CState2D As New List(Of Point)
+        For Each Point3D In L
+            CState2D.Add(New Point(Point3D.X, Point3D.Y))
+        Next
+        Return CState2D
+    End Function
     Public Shared Function MatrixType(type As Char, angle As Double) As Single(,)
         type = UCase(type)
         If type = "Z" Then
