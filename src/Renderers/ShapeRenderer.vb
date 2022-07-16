@@ -23,7 +23,7 @@ Public Class ShapeRenderer
                 If Not Vertex.Equals(OtherVertex) Then
                     Dim AvrZ As Integer = (Vertex.Z + OtherVertex.Z) / 2
                     Dim Mapped As Integer = XMath.Map(AvrZ, -150, 150, 0, 255)
-                    Dim C As Color = Color.FromArgb(255, Mapped, Mapped)
+                    Dim C As Color = Color.FromArgb(Mapped, Mapped, Mapped)
                     Dim P As New Pen(C, 3)
                     g.DrawLine(P, W2 - Vertex.X, H2 - Vertex.Y, W2 - OtherVertex.X, H2 - OtherVertex.Y)
                     P.Dispose()

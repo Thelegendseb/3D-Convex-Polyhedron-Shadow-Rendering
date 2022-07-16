@@ -3,14 +3,14 @@ Imports _3DConvexPolyhedronShadowTest.ShapeMath
 Public Class Shape
     Implements IShape
     Protected Property Transform As Transform Implements IShape.Transform
-    Protected Property Verticies As List(Of Vector3) Implements IShape.Verticies
+    Protected Property Vertices As List(Of Vector3) Implements IShape.Vertices
     Protected Property Faces As List(Of Face) Implements IShape.Faces
     Sub New()
         Me.InitializeAttributes()
     End Sub
     Private Sub InitializeAttributes() Implements IShape.InitializeAttributes
         Me.Transform = New Transform
-        Me.Verticies = New List(Of Vector3)
+        Me.Vertices = New List(Of Vector3)
         Me.Faces = New List(Of Face)
     End Sub
     Public Function CallState() As List(Of Vector3) Implements IShape.CallState
@@ -18,7 +18,7 @@ Public Class Shape
 
         ' // Rotate each vertex by the transform and return the new list of points
 
-        For Each Vertex As Vector3 In Me.Verticies
+        For Each Vertex As Vector3 In Me.Vertices
             Dim StateVertex As New Vector3(Vertex.X, Vertex.Y, Vertex.Z)
 
             ' Rotation Matrix Multiplication
@@ -47,8 +47,8 @@ Public Class Shape
     Public Function GetTransform() As Transform
         Return Me.Transform
     End Function
-    Public Function GetVerticies() As List(Of Vector3)
-        Return Me.Verticies
+    Public Function GetVertices() As List(Of Vector3)
+        Return Me.Vertices
     End Function
     Public Function GetFaces() As List(Of Face)
         Return Me.Faces

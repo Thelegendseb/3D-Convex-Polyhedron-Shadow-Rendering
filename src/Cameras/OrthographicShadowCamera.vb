@@ -3,6 +3,7 @@ Public Class OrthographicShadowCamera
     Inherits ShadowCamera
     Sub New(ShapePtr As Shape)
         MyBase.New(ShapePtr)
+
     End Sub
     Public Overrides Function GetShadowHull() As List(Of Point)
 

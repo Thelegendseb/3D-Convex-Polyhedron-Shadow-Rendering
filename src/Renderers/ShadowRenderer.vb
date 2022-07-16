@@ -25,10 +25,12 @@ Public Class ShadowRenderer
             Hull(i).Y = H2 - Hull(i).Y
         Next
 
-        g.FillPolygon(Brushes.DarkGray, Hull)
 
-        For i = 0 To Hull.Length - 1
-            g.FillEllipse(Brushes.Red, Hull(i).X - 5, Hull(i).Y - 5, 10, 10)
-        Next
+
+        g.FillPolygon(Brushes.DarkGray, Hull)
+        Dim P As New Pen(Brushes.Black, 5)
+        g.DrawPolygon(P, Hull)
+        P.Dispose()
+
     End Sub
 End Class
