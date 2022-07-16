@@ -13,22 +13,42 @@ Public Class ShapeRenderer
 
     Public Overrides Sub Draw(ByRef g As Graphics)
 
-        Dim W2 As Integer = g.VisibleClipBounds.Width / 4
-        Dim H2 As Integer = (g.VisibleClipBounds.Height / 3) * 2
+        Dim W2 As Integer = g.VisibleClipBounds.Width / 2
+        Dim H2 As Integer = g.VisibleClipBounds.Height / 2
 
         Dim CState As List(Of Vector3) = Me.ShapePtr.CallState
 
+        Dim CStateDisplaced As New List(Of Vector3)
+
         For Each Vertex As Vector3 In CState
-            For Each OtherVertex As Vector3 In CState
+            CStateDisplaced.Add(New Vector3(W2 - Vertex.X, H2 - Vertex.Y, Vertex.Z))
+        Next
+        CState.Clear()
+
+        Dim CState2D As List(Of Point) = ShapeMath.RemoveZComponent(CStateDisplaced)
+
+        Dim Hull As List(Of Point) = GrahamScan.GetCovexHull(CState2D)
+
+        Dim HullArr() As Point = Hull.ToArray()
+
+        g.FillPolygon(Brushes.IndianRed, HullArr)
+
+        Dim P As New Pen(Brushes.AntiqueWhite, 8)
+        g.DrawPolygon(P, HullArr)
+
+        CStateDisplaced = CStateDisplaced.OrderBy(Function(V) V.Z).Reverse.ToList
+
+        For Each Vertex As Vector3 In CStateDisplaced
+            For Each OtherVertex As Vector3 In CStateDisplaced
                 If Not Vertex.Equals(OtherVertex) Then
-                    Dim AvrZ As Integer = (Vertex.Z + OtherVertex.Z) / 2
-                    Dim Mapped As Integer = XMath.Map(AvrZ, -150, 150, 0, 255)
-                    Dim C As Color = Color.FromArgb(Mapped, Mapped, Mapped)
-                    Dim P As New Pen(C, 3)
-                    g.DrawLine(P, W2 - Vertex.X, H2 - Vertex.Y, W2 - OtherVertex.X, H2 - OtherVertex.Y)
-                    P.Dispose()
+                    Dim C As Integer = XMath.Map((Vertex.Z + OtherVertex.Z) / 2, -150, 150, 0, 255)
+                    P.Color = Color.FromArgb(0, C, 255)
+                    g.DrawLine(P, Vertex.X, Vertex.Y, OtherVertex.X, OtherVertex.Y)
                 End If
             Next
         Next
+
+        P.Dispose()
+
     End Sub
 End Class

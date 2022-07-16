@@ -57,6 +57,7 @@ Public Class ShapeRotationController
         Else
 
             Rotate()
+
             Me.ShapeChange *= 0.9
 
         End If

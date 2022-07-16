@@ -15,8 +15,8 @@ Public Class ShadowRenderer
 
     Public Overrides Sub Draw(ByRef g As Graphics)
 
-        Dim W2 As Integer = (g.VisibleClipBounds.Width / 4) * 3
-        Dim H2 As Integer = (g.VisibleClipBounds.Height / 3) * 2
+        Dim W2 As Integer = g.VisibleClipBounds.Width / 2
+        Dim H2 As Integer = g.VisibleClipBounds.Height / 2
 
         Dim Hull() As Point = Me.Camera.GetShadowHull.ToArray
 
@@ -26,9 +26,8 @@ Public Class ShadowRenderer
         Next
 
 
-
-        g.FillPolygon(Brushes.DarkGray, Hull)
-        Dim P As New Pen(Brushes.Black, 5)
+        g.FillPolygon(Brushes.Black, Hull)
+        Dim P As New Pen(Brushes.Red, 3)
         g.DrawPolygon(P, Hull)
         P.Dispose()
 

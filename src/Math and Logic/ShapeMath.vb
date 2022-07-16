@@ -3,6 +3,18 @@ Public Class ShapeMath
     Public Shared Function DegreesToRadians(val As Double) As Double
         Return val * (Math.PI / 180)
     End Function
+    Public Shared Function Midpoint3D(L As List(Of Vector3)) As Vector3
+        Dim R As New Vector3
+        For Each Vertex As Vector3 In L
+            R.X += Vertex.X
+            R.Y += Vertex.Y
+            R.Z += Vertex.Z
+        Next
+        R.X /= L.Count
+        R.Y /= L.Count
+        R.Z /= L.Count
+        Return R
+    End Function
     Public Shared Function RemoveZComponent(L As List(Of Vector3)) As List(Of Point)
         Dim CState2D As New List(Of Point)
         For Each Point3D In L
