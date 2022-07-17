@@ -19,7 +19,10 @@ Public Class Shape
         ' // Rotate each vertex by the transform and return the new list of points
 
         For Each Vertex As Vector3 In Me.Vertices
-            Dim StateVertex As New Vector3(Vertex.X, Vertex.Y, Vertex.Z)
+
+            ' // Apply scale from transform
+
+            Dim StateVertex As New Vector3(Vertex.X * Me.Transform.Scale.X, Vertex.Y * Me.Transform.Scale.Y, Vertex.Z * Me.Transform.Scale.Z)
 
             ' Rotation Matrix Multiplication
 

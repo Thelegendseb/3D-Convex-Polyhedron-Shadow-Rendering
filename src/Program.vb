@@ -47,10 +47,10 @@ Public Class Program
 
         InputChecks()
 
-
         Me.Camera.SetWallZ(WallZ)
         Me.Camera.SetLight(Me.Light)
         Me.CurrentShape.GetTransform.Rotation.LetClampAll()
+
     End Sub
 
     Private Sub InputChecks()
@@ -77,14 +77,17 @@ Public Class Program
     Private Sub ConstructShape()
         Me.CurrentShape = New Shape
 
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-75, -75, -75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-75, -75, 75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-75, 75, 75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(75, 75, 75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(75, -75, -75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(75, 75, -75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(75, -75, 75))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-75, 75, -75))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, -1, -1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, -1, 1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, 1, 1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, 1, 1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, -1, -1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, 1, -1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, -1, 1))
+        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, 1, -1))
+
+        Me.CurrentShape.GetTransform.Scale.SetAll(75)
+
 
     End Sub
 End Class
