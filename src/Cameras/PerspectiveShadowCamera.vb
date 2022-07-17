@@ -1,12 +1,12 @@
 ﻿Imports System.Numerics
 Public Class PerspectiveShadowCamera
     Inherits ShadowCamera
-    Protected LightSource As Vector3
-    Protected WallZ As Integer
-    Sub New(ShapePtr As Shape, LightSourcePtr As Vector3, WallZIn As Integer)
+    Protected LightSource As LightSource
+    Protected Wall As Wall
+    Sub New(ShapePtr As Shape, LightSourcePtr As LightSource, WallIn As Wall)
         MyBase.New(ShapePtr)
         Me.LightSource = LightSourcePtr
-        Me.WallZ = WallZIn
+        Me.Wall = WallIn
     End Sub
     Public Overrides Function GetShadowHull() As List(Of Point)
 
@@ -27,7 +27,7 @@ Public Class PerspectiveShadowCamera
 
         For Each Vertex As Vector3 In CState
             Dim Ray As New Ray3D
-            Ray.Position = Me.LightSource
+            Ray.Position = Me.LightSource.GetPosition
             Ray.Direction = New Vector3(Me.ShapePtr.GetTransform.Position.X + Vertex.X - Ray.Position.X,
                                         Me.ShapePtr.GetTransform.Position.Y + Vertex.Y - Ray.Position.Y,
                                         Me.ShapePtr.GetTransform.Position.Z + Vertex.Z - Ray.Position.Z)
@@ -36,7 +36,7 @@ Public Class PerspectiveShadowCamera
 
         ' // Extend each Direction vertex to a given z value
 
-        Dim DiffZ As Double = Math.Abs(Me.WallZ - Me.LightSource.Z)
+        Dim DiffZ As Double = Math.Abs(Me.Wall.GetZ - Me.LightSource.GetPosition.Z)
         For Each Ray As Ray3D In Rays
             Dim Multiplier As Double = DiffZ / Ray.Direction.Z
 
@@ -57,10 +57,4 @@ Public Class PerspectiveShadowCamera
         Next
         Return R
     End Function
-    Public Sub SetWallZ(val As Integer)
-        Me.WallZ = val
-    End Sub
-    Public Sub SetLight(val As Vector3)
-        Me.LightSource = val
-    End Sub
 End Class

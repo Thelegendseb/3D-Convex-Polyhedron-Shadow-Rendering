@@ -3,91 +3,84 @@ Imports System.Numerics
 Public Class Program
     Inherits XApp
 
-    Private CurrentShape As Shape
+    Private Shape As Shape
 
     Private Camera As PerspectiveShadowCamera
 
-    Private Light As Vector3
-    Private WallZ As Integer
+    Private Light As OmniDirectionalLightSource
+
+    Private Wall As Wall
 
     Sub New(FormIn As Form)
         MyBase.New(FormIn)
         FormIn.Text = "3D Convex Polyhedron Shadow"
         Me.Session.Window.SetClearColor(Color.FromArgb(10, 20, 30))
 
-        Me.Light = New Vector3(0, 0, -600)
-
-        Me.WallZ = 300
-
-        ConstructShape()
 
         ' // Initialize Attributes
 
-        Me.Camera = New PerspectiveShadowCamera(Me.CurrentShape, Me.Light, Me.WallZ)
+        Me.Light = New OmniDirectionalLightSource(New Vector3(0, 0, -600))
+        Me.Wall = New Wall(300)
+        Me.Shape = DefualtCube()
+        Me.Camera = New PerspectiveShadowCamera(Me.Shape, Me.Light, Me.Wall)
 
         ' // Add Controllers
 
-        Me.Session.AddObj(New ShapeRotationController(Me.CurrentShape, Me.Session.Window))
+        Me.Session.AddObj(New ShapeRotationController(Me.Shape, Me.Session.Window))
 
         ' // Add Renderers
 
         Me.Session.AddObj(New ShadowRenderer(Me.Camera))
-        Me.Session.AddObj(New ShapeRenderer(Me.CurrentShape))
-        Me.Session.AddObj(New RuleRenderer(Me.CurrentShape))
-
-
-        ' ===== !!!!!!!!! ========
-
-        ' ADD LIGHT SOURCE VISUALIZER
-
-        ' ===== !!!!!!!!! ========
+        Me.Session.AddObj(New ShapeRenderer(Me.Shape))
+        Me.Session.AddObj(New LightSourceRenderer(Me.Light))
+        Me.Session.AddObj(New RuleRenderer(Me.Shape))
 
     End Sub
     Public Overrides Sub UpdateOccured()
 
         InputChecks()
 
-        Me.Camera.SetWallZ(WallZ)
-        Me.Camera.SetLight(Me.Light)
-        Me.CurrentShape.GetTransform.Rotation.LetClampAll()
+        Me.Shape.GetTransform.Rotation.LetClampAll()
 
     End Sub
 
     Private Sub InputChecks()
         If Me.Session.KeyManager.IsDown(Keys.A) Then
-            Me.Light.X -= 5
+            Me.Light.MoveLeftBy(-5)
         End If
         If Me.Session.KeyManager.IsDown(Keys.D) Then
-            Me.Light.X += 5
+            Me.Light.MoveRightBy(-5)
         End If
         If Me.Session.KeyManager.IsDown(Keys.W) Then
-            Me.Light.Y -= 5
+            Me.Light.MoveUpBy(-5)
         End If
         If Me.Session.KeyManager.IsDown(Keys.S) Then
-            Me.Light.Y += 5
+            Me.Light.MoveDownBy(-5)
         End If
         If Me.Session.KeyManager.IsDown(Keys.Up) Then
-            Me.Light.Z += 5
+            Me.Light.MoveForwardBy(-5)
         End If
         If Me.Session.KeyManager.IsDown(Keys.Down) Then
-            Me.Light.Z -= 5
+            Me.Light.MoveBackwardBy(-5)
         End If
     End Sub
 
-    Private Sub ConstructShape()
-        Me.CurrentShape = New Shape
+    Private Function DefualtCube() As Shape
 
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, -1, -1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, -1, 1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, 1, 1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, 1, 1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, -1, -1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, 1, -1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(1, -1, 1))
-        Me.CurrentShape.GetVertices.Add(New Numerics.Vector3(-1, 1, -1))
+        Dim Cube As New Shape
 
-        Me.CurrentShape.GetTransform.Scale.SetAll(75)
+        Cube.GetVertices.Add(New Numerics.Vector3(-1, -1, -1))
+        Cube.GetVertices.Add(New Numerics.Vector3(-1, -1, 1))
+        Cube.GetVertices.Add(New Numerics.Vector3(-1, 1, 1))
+        Cube.GetVertices.Add(New Numerics.Vector3(1, 1, 1))
+        Cube.GetVertices.Add(New Numerics.Vector3(1, -1, -1))
+        Cube.GetVertices.Add(New Numerics.Vector3(1, 1, -1))
+        Cube.GetVertices.Add(New Numerics.Vector3(1, -1, 1))
+        Cube.GetVertices.Add(New Numerics.Vector3(-1, 1, -1))
 
+        Cube.GetTransform.Scale.SetAll(75)
 
-    End Sub
+        Return Cube
+
+    End Function
 End Class
