@@ -35,6 +35,13 @@ Public Class Program
         Me.Session.AddObj(New ShapeRenderer(Me.CurrentShape))
         Me.Session.AddObj(New RuleRenderer(Me.CurrentShape))
 
+
+        ' ===== !!!!!!!!! ========
+
+        ' ADD LIGHT SOURCE VISUALIZER
+
+        ' ===== !!!!!!!!! ========
+
     End Sub
     Public Overrides Sub UpdateOccured()
 
