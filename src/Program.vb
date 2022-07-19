@@ -5,7 +5,7 @@ Public Class Program
 
     Private Shape As Shape
 
-    Private Camera As PerspectiveShadowCamera
+    Private Camera As ShadowCamera
 
     Private Light As OmniDirectionalLightSource
 
@@ -21,7 +21,11 @@ Public Class Program
 
         Me.Light = New OmniDirectionalLightSource(New Vector3(0, 0, -600))
         Me.Wall = New Wall(300)
-        Me.Shape = DefualtCube()
+
+        ' // Me.Shape = DefualtShapes.Octahedron
+        ' // Me.Shape = ObjParser.FromFile("D:\Users\sebcl\Documents\Tests\random.obj")
+        Me.Shape = ObjParser.FromFile(ObjSelector.SelectFromFileExplorer)
+
         Me.Camera = New PerspectiveShadowCamera(Me.Shape, Me.Light, Me.Wall)
 
         ' // Add Controllers
@@ -58,29 +62,11 @@ Public Class Program
             Me.Light.MoveDownBy(-5)
         End If
         If Me.Session.KeyManager.IsDown(Keys.Up) Then
-            Me.Light.MoveForwardBy(-5)
+            Me.Light.MoveForwardBy(-10)
         End If
         If Me.Session.KeyManager.IsDown(Keys.Down) Then
-            Me.Light.MoveBackwardBy(-5)
+            Me.Light.MoveBackwardBy(-10)
         End If
     End Sub
 
-    Private Function DefualtCube() As Shape
-
-        Dim Cube As New Shape
-
-        Cube.GetVertices.Add(New Numerics.Vector3(-1, -1, -1))
-        Cube.GetVertices.Add(New Numerics.Vector3(-1, -1, 1))
-        Cube.GetVertices.Add(New Numerics.Vector3(-1, 1, 1))
-        Cube.GetVertices.Add(New Numerics.Vector3(1, 1, 1))
-        Cube.GetVertices.Add(New Numerics.Vector3(1, -1, -1))
-        Cube.GetVertices.Add(New Numerics.Vector3(1, 1, -1))
-        Cube.GetVertices.Add(New Numerics.Vector3(1, -1, 1))
-        Cube.GetVertices.Add(New Numerics.Vector3(-1, 1, -1))
-
-        Cube.GetTransform.Scale.SetAll(75)
-
-        Return Cube
-
-    End Function
 End Class

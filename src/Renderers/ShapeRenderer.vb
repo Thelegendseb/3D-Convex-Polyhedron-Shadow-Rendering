@@ -27,28 +27,51 @@ Public Class ShapeRenderer
 
         Dim CState2D As List(Of Point) = ShapeMath.RemoveZComponent(CStateDisplaced)
 
-        Dim Hull As List(Of Point) = GrahamScan.GetCovexHull(CState2D)
-
-        Dim HullArr() As Point = Hull.ToArray()
-
-        g.FillPolygon(Brushes.IndianRed, HullArr)
-
         Dim P As New Pen(Brushes.AntiqueWhite, 8)
-        g.DrawPolygon(P, HullArr)
 
-        CStateDisplaced = CStateDisplaced.OrderBy(Function(V) V.Z).Reverse.ToList
-
-        For Each Vertex As Vector3 In CStateDisplaced
-            For Each OtherVertex As Vector3 In CStateDisplaced
-                If Not Vertex.Equals(OtherVertex) Then
-                    Dim C As Integer = XMath.Map((Vertex.Z + OtherVertex.Z) / 2, -150, 150, 0, 255)
-                    P.Color = Color.FromArgb(0, C, 255)
-                    g.DrawLine(P, Vertex.X, Vertex.Y, OtherVertex.X, OtherVertex.Y)
-                End If
-            Next
-        Next
+        If Me.ShapePtr.GetFaces.Count = 0 Then
+            CStateDisplaced = CStateDisplaced.OrderBy(Function(V) V.Z).Reverse.ToList
+            DrawAllConnected(g, CStateDisplaced)
+        Else
+            DrawFaces(g, CStateDisplaced)
+        End If
 
         P.Dispose()
 
     End Sub
+
+    Private Sub DrawFaces(ByRef g As Graphics, ByVal CStateDisplaced As List(Of Vector3))
+        Dim P As New Pen(Brushes.AntiqueWhite, 8)
+        For Each Face As Face In Me.ShapePtr.GetFaces
+            For i = 0 To Face.VertexIndexs.Length - 2
+                Dim Vertex As Vector3 = CStateDisplaced(Face.VertexIndexs(i))
+                Dim OtherVertex As Vector3 = CStateDisplaced(Face.VertexIndexs(i + 1))
+                P.Color = GetColorOfLine(Vertex, OtherVertex)
+                g.DrawLine(P, CInt(Vertex.X), CInt(Vertex.Y), CInt(OtherVertex.X), CInt(OtherVertex.Y))
+            Next
+            Dim EndVertex As Vector3 = CStateDisplaced(Face.VertexIndexs(0))
+            Dim EndOtherVertex As Vector3 = CStateDisplaced(Face.VertexIndexs(Face.VertexIndexs.Length - 1))
+            P.Color = GetColorOfLine(EndVertex, EndOtherVertex)
+            g.DrawLine(P, CInt(EndVertex.X), CInt(EndVertex.Y), CInt(EndOtherVertex.X), CInt(EndOtherVertex.Y))
+        Next
+        P.Dispose()
+    End Sub
+    Private Sub DrawAllConnected(ByRef g As Graphics, ByVal CStateDisplaced As List(Of Vector3))
+        Dim P As New Pen(Brushes.AntiqueWhite, 8)
+        For Each Vertex As Vector3 In CStateDisplaced
+            For Each OtherVertex As Vector3 In CStateDisplaced
+                If Not Vertex.Equals(OtherVertex) Then
+                    P.Color = GetColorOfLine(Vertex, OtherVertex)
+                    g.DrawLine(P, CInt(Vertex.X), CInt(Vertex.Y), CInt(OtherVertex.X), CInt(OtherVertex.Y))
+                End If
+            Next
+        Next
+        P.Dispose()
+    End Sub
+    Private Function GetColorOfLine(ByVal Vertex As Vector3, ByVal OtherVertex As Vector3) As Color
+        Dim C As Integer = XMath.Map((Vertex.Z + OtherVertex.Z) / 2, -100, 100, 0, 255)
+        If C < 0 Then C = 0
+        If C > 255 Then C = 255
+        Return Color.FromArgb(0, C, 255)
+    End Function
 End Class
